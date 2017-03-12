@@ -171,6 +171,13 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
 
             output = output + grain
 
+        #Basically what is happening below is: if the random number is greating than the
+        #branching probability (preset as of now), find the feature vector that the current grain resides in.
+        #Then, go through a precomupted random order of the other feature vectors (maybe recompute the order
+        #every iteration of the while loop), and if it finds a feature vector that matches above the (currently
+        #preset) threshold, set the next grain to start at the beginning of that feature vector.
+        #Then, during the next iteration, the algorithm will select a random grain from a window containing 
+        #grains within the previously determined feature vector. Its a hack, but it ran when I tried it.
         if np.random.random() > branch:
             vec = np.searchsorted(feat_vec_index, x) - 1
             for index in order:
