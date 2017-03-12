@@ -75,7 +75,7 @@ def granulate(music, sr, grain_frac, grains_per_window, overlap, output_size, wi
 if __name__ == "__main__":
 
     print "This is a demo of the granulate function. \nIt generates a 30s output file named grantest.wav. \nIt uses 2ms grains, a selection range of 1000 grains, and a Tukey window."
-    music, sr = librosa.load('misuse.wav')
+    music, sr = librosa.load('/path/to/your/sound.wav')
 
     test = granulate(music, sr, 0.02, 1000, 0.5, 30, 'tukey')
 
