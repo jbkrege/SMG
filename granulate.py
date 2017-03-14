@@ -123,6 +123,7 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
     #eventually these will be user defined
     branch = 0.3
     thresh = 0.9
+    breakout = 0.8
     #END#
 
 
@@ -152,6 +153,9 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
     end = begin + output_len
 
     while output.size < output_len:
+        #if we reached the end of the track, jump to a new place
+        if (x + grain_size) >= music.size:
+            x = np.random.randint(0, music.size/2)
         if grain_frac is 0:
             grain_size = int(sr*((0.1 - 0.01) * np.random.random())) #+ 0.01
 
@@ -179,6 +183,9 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
                     if feat_vec_index[index] < (music.size - window_size):
                         x = feat_vec_index[index]
                         break
+        #break out of the same feature we are stuck in
+        if np.random.random() > breakout:
+            x = np.random.randint(0, music.size)
 
         x += grain_size
 
@@ -225,8 +232,8 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
     feat_index_short = index_feature_vectors(sim_mat.shape[1], track2.size)
     feat_index_long = index_feature_vectors(sim_mat.shape[0], track1.size)
 
-    #print "track1 size: ", track1.size
-    #print "track2 size: ", track2.size
+    print "track1 size: ", track1.size
+    print "track2 size: ", track2.size
     #print sim_mat.shape
     #potentially create a new order every iteration
     order_short = np.random.randint(sim_mat.shape[1], size=sim_mat.shape[1])
@@ -237,6 +244,7 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
     branch = 0.3
     thresh = 0.8
     jump = 0.2
+    breakout = 0.8
     #END#
 
 
@@ -277,6 +285,9 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
 
 
     while output.size < output_len:
+        #print "track: ", track
+        if (x + window_size) >= music.size:
+            x = np.random.randint(0, music.size/2)
         #print "output size: ", output.size
         if grain_frac is 0:
             grain_size = int(sr*((0.1 - 0.01) * np.random.random())) #+ 0.01
@@ -285,6 +296,7 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
 
         start = np.random.randint(x, (x+(window_size - grain_size)))
         stop = start + grain_size
+        #print start, stop, music[start:stop].size
         grain = music[start:stop] * window(grain_size)
 
 
@@ -343,6 +355,10 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
                     if feat_index[y] < (music.size - window_size):
                         x = feat_index[y]
                         break
+
+        #break out of the same feature we are stuck in
+        if np.random.random() > breakout:
+            x = np.random.randint(0, music.size)
 
 
         x += grain_size
