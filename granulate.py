@@ -10,17 +10,17 @@ def granulate(music, sr, grain_frac, grains_per_window, overlap, output_size, wi
         sr: the sample rate for the input signal music
         grain_frac: a float representing the grain duration as a fraction of a second. Set to 0 for random grain sizes
             EX: grain_frac = 0.01, grain length is 10 ms
-        grains_per_window: how big the range of grains is for the algorithm to pick the next 
+        grains_per_window: how big the range of grains is for the algorithm to pick the next
             random grain from. Small GpW means not a lot of variety
-        overlap: how much will each grain overlap the preceding grain. If 1, grains are 
+        overlap: how much will each grain overlap the preceding grain. If 1, grains are
             added back to back, if < 1, grains over lap, if > 1, space added between grains
         output_size: the duration in seconds of the desired output
-        window_type: what type of window will be applied to each grain. 
+        window_type: what type of window will be applied to each grain.
             Options are Hann and Triangle as of now
 
     OUTPUT:
-        output: A signal of duration output_size that starts from a random position in the song, 
-            and proceeds linearly through the song randomly selecting grains from the window and 
+        output: A signal of duration output_size that starts from a random position in the song,
+            and proceeds linearly through the song randomly selecting grains from the window and
             adding them together with the desired overlap.
     '''
     output = np.array([0])
@@ -41,13 +41,13 @@ def granulate(music, sr, grain_frac, grains_per_window, overlap, output_size, wi
         window = scipy.signal.triang
     elif window_type is 'tukey':
         window = scipy.signal.tukey
-    
+
     #x = 0
     x = np.random.randint(0, music.size/2)
-    begin = x 
+    begin = x
 
     end = begin + output_len
-    
+
     while output.size < output_len:
         if grain_frac is 0:
             grain_size = int(sr*((0.1 - 0.01) * np.random.random())) #+ 0.01
@@ -55,6 +55,8 @@ def granulate(music, sr, grain_frac, grains_per_window, overlap, output_size, wi
 
         start = np.random.randint(x, (x+(window_size - grain_size)))
         stop = start + grain_size
+        if start > end or stop > end:
+            continue
         grain = music[start:stop] * window(grain_size)
 
         if x is begin:
@@ -71,7 +73,7 @@ def granulate(music, sr, grain_frac, grains_per_window, overlap, output_size, wi
             output = output + grain
 
         x += grain_size
-         
+
     return output
 
 def index_feature_vectors(num_feat_vecs, num_samples):
@@ -100,17 +102,17 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
         sr: the sample rate for the input signal music
         grain_frac: a float representing the grain duration as a fraction of a second. Set to 0 for random grain sizes
             EX: grain_frac = 0.01, grain length is 10 ms
-        grains_per_window: how big the range of grains is for the algorithm to pick the next 
+        grains_per_window: how big the range of grains is for the algorithm to pick the next
             random grain from. Small GpW means not a lot of variety
-        overlap: how much will each grain overlap the preceding grain. If 1, grains are 
+        overlap: how much will each grain overlap the preceding grain. If 1, grains are
             added back to back, if < 1, grains over lap, if > 1, space added between grains
         output_size: the duration in seconds of the desired output
-        window_type: what type of window will be applied to each grain. 
+        window_type: what type of window will be applied to each grain.
             Options are Hann and Triangle as of now
 
     OUTPUT:
-        output: A signal of duration output_size that starts from a random position in the song, 
-            and proceeds linearly through the song randomly selecting grains from the window and 
+        output: A signal of duration output_size that starts from a random position in the song,
+            and proceeds linearly through the song randomly selecting grains from the window and
             adding them together with the desired overlap.
     '''
 
@@ -119,10 +121,10 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
     #potentially create a new order every iteration
     order = np.random.randint(sim_mat[-1].size, size=sim_mat[-1].size)
     #eventually these will be user defined
-    branch = 0.5
-    thresh = 0.7
+    branch = 0.3
+    thresh = 0.9
     #END#
-    
+
 
     output = np.array([0])
     output_len = output_size * sr
@@ -142,17 +144,16 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
         window = scipy.signal.triang
     elif window_type is 'tukey':
         window = scipy.signal.tukey
-    
+
     #x = 0
     x = np.random.randint(0, music.size/2)
-    begin = x 
+    begin = x
 
     end = begin + output_len
-    
+
     while output.size < output_len:
         if grain_frac is 0:
             grain_size = int(sr*((0.1 - 0.01) * np.random.random())) #+ 0.01
-
 
         start = np.random.randint(x, (x+(window_size - grain_size)))
         stop = start + grain_size
@@ -180,7 +181,149 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
                         break
 
         x += grain_size
-         
+
+    return output
+
+
+#TODO
+#1 Cross sim granulate
+#2 make parameters more intuitive/more like an actual granulator (overlap should be grain frequency/grains per second, window_size should be in seconds)
+#3 add pitch changing
+#2 implement randomness parameters (% randomness)
+
+def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_window, overlap, output_size, window_type = 'no window'):
+    '''
+    INPUT:
+        music: the input signal
+        sim_mat: a self similarity matrix of the music signal
+        sr: the sample rate for the input signal music
+        grain_frac: a float representing the grain duration as a fraction of a second. Set to 0 for random grain sizes
+            EX: grain_frac = 0.01, grain length is 10 ms
+        grains_per_window: how big the range of grains is for the algorithm to pick the next
+            random grain from. Small GpW means not a lot of variety
+        overlap: how much will each grain overlap the preceding grain. If 1, grains are
+            added back to back, if < 1, grains over lap, if > 1, space added between grains
+        output_size: the duration in seconds of the desired output
+        window_type: what type of window will be applied to each grain.
+            Options are Hann and Triangle as of now
+
+    OUTPUT:
+        output: A signal of duration output_size that starts from a random position in the song,
+            and proceeds linearly through the song randomly selecting grains from the window and
+            adding them together with the desired overlap.
+    '''
+    #track1 is always the longer track
+    if track1.size <= track2.size:
+        temp = track1
+        track1 = track2
+        track2 = temp
+
+    #similarity matrix setup#
+    #track2len = min(sim_mat.size[0], sim_mat.size[1])
+    #track1len = max(sim_mat.size[0], sim_mat.size[1])
+
+    feat_index_short = index_feature_vectors(sim_mat.shape[1], track2.size)
+    feat_index_long = index_feature_vectors(sim_mat.shape[0], track1.size)
+
+    #potentially create a new order every iteration
+    order_short = np.random.randint(sim_mat.shape[1], size=sim_mat.shape[1])
+    order_long = np.random.randint(sim_mat.shape[0], size=sim_mat.shape[0])
+    #eventually these will be user defined
+    branch = 0.3
+    thresh = 0.9
+    jump = 0.5
+    #END#
+
+
+    output = np.array([0])
+    output_len = output_size * sr
+
+    if grain_frac > 0:
+        grain_size = int(sr * grain_frac)
+        window_size = grain_size * grains_per_window
+    else:
+        grain_size = int(sr * 0.05)
+        window_size = grain_size * grains_per_window
+
+    if (window_size*grain_size) > music.size
+
+    if window_type is 'no window':
+        window = one
+    elif window_type is 'hann':
+        window = scipy.signal.hann
+    elif window_type is 'triangle':
+        window = scipy.signal.triang
+    elif window_type is 'tukey':
+        window = scipy.signal.tukey
+
+    #x = 0
+    x = np.random.randint(0, music.size/2)
+    begin = x
+
+    end = begin + output_len
+
+    music = track1
+    track = 1
+
+    while output.size < output_len:
+
+        if grain_frac is 0:
+            grain_size = int(sr*((0.1 - 0.01) * np.random.random())) #+ 0.01
+
+
+        start = np.random.randint(x, (x+(window_size - grain_size)))
+        stop = start + grain_size
+        grain = music[start:stop] * window(grain_size)
+
+        if x is begin:
+            output = np.append(output, grain )
+        else:
+            if overlap is 0:
+                postpad = int(grain_size*((2.0 - 0.01) * np.random.random()))
+            else:
+                postpad = int(grain_size * (overlap))
+            output = np.lib.pad(output, (0,postpad), 'constant', constant_values=(0, 0))
+            prepad = output.size - grain_size
+            grain = np.lib.pad(grain, (prepad,0), 'constant', constant_values=(0, 0))
+
+            output = output + grain
+
+        if np.random.random() > branch:
+            vec = np.searchsorted(feat_index, x) - 1
+            for index in order:
+                if sim_mat[vec][index] > thresh and index is not vec:
+                    if feat_index[index] < (music.size - window_size):
+                        x = feat_index[index]
+                        break
+        elif np.random.random() > jump:
+            if track is 1:
+                music = track2
+                track = 2
+                feat_index = feat_index_short
+                order = order_short
+            else:
+                music = track1
+                track = 1
+                feat_index = feat_index_long
+                order = order_long
+            vec = np.searchsorted(feat_index, x) - 1
+            for index in order:
+                if track is 1:
+                    x = vec
+                    y = index
+                else:
+                    x = index
+                    y = vec
+                if sim_mat[x][y] > thresh and index is not vec:
+                    if feat_index[y] < (music.size - window_size):
+                        x = feat_index[y]
+                        break
+
+
+        x += grain_size
+
+
+
     return output
 
 
