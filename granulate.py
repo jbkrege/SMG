@@ -172,13 +172,6 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
 
             output = output + grain
 
-        #Basically what is happening below is: if the random number is greating than the
-        #branching probability (preset as of now), find the feature vector that the current grain resides in.
-        #Then, go through a precomupted random order of the other feature vectors (maybe recompute the order
-        #every iteration of the while loop), and if it finds a feature vector that matches above the (currently
-        #preset) threshold, set the next grain to start at the beginning of that feature vector.
-        #Then, during the next iteration, the algorithm will select a random grain from a window containing 
-        #grains within the previously determined feature vector. Its a hack, but it ran when I tried it.
         if np.random.random() > branch:
             vec = np.searchsorted(feat_vec_index, x) - 1
             for index in order:
@@ -232,13 +225,18 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
     feat_index_short = index_feature_vectors(sim_mat.shape[1], track2.size)
     feat_index_long = index_feature_vectors(sim_mat.shape[0], track1.size)
 
+    #print "track1 size: ", track1.size
+    #print "track2 size: ", track2.size
+    #print sim_mat.shape
     #potentially create a new order every iteration
     order_short = np.random.randint(sim_mat.shape[1], size=sim_mat.shape[1])
+    #print order_short.size
     order_long = np.random.randint(sim_mat.shape[0], size=sim_mat.shape[0])
+    #print order_long.size
     #eventually these will be user defined
     branch = 0.3
-    thresh = 0.9
-    jump = 0.5
+    thresh = 0.8
+    jump = 0.2
     #END#
 
 
@@ -252,7 +250,10 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
         grain_size = int(sr * 0.05)
         window_size = grain_size * grains_per_window
 
-    if (window_size*grain_size) > music.size
+    if window_size > track2.size:
+        window_size = track2.size/grain_size
+        print "window size too big, setting to: ", window_size
+
 
     if window_type is 'no window':
         window = one
@@ -264,45 +265,58 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
         window = scipy.signal.tukey
 
     #x = 0
-    x = np.random.randint(0, music.size/2)
+    x = np.random.randint(0, track1.size/2)
     begin = x
 
     end = begin + output_len
 
     music = track1
+    feat_index = feat_index_long
+    order = order_long
     track = 1
 
-    while output.size < output_len:
 
+    while output.size < output_len:
+        #print "output size: ", output.size
         if grain_frac is 0:
             grain_size = int(sr*((0.1 - 0.01) * np.random.random())) #+ 0.01
-
+            if grain_size >= output.size and x != begin:
+                grain_size = output.size
 
         start = np.random.randint(x, (x+(window_size - grain_size)))
         stop = start + grain_size
         grain = music[start:stop] * window(grain_size)
 
+
+        #print "grain size: ", grain.size
+
         if x is begin:
             output = np.append(output, grain )
         else:
             if overlap is 0:
-                postpad = int(grain_size*((2.0 - 0.01) * np.random.random()))
+                postpad = int(grain_size*((0.1 - 0.01) * np.random.random()))
             else:
                 postpad = int(grain_size * (overlap))
+            #print output.size
             output = np.lib.pad(output, (0,postpad), 'constant', constant_values=(0, 0))
             prepad = output.size - grain_size
             grain = np.lib.pad(grain, (prepad,0), 'constant', constant_values=(0, 0))
 
             output = output + grain
 
-        if np.random.random() > branch:
-            vec = np.searchsorted(feat_index, x) - 1
-            for index in order:
-                if sim_mat[vec][index] > thresh and index is not vec:
-                    if feat_index[index] < (music.size - window_size):
-                        x = feat_index[index]
-                        break
-        elif np.random.random() > jump:
+        #if np.random.random() > branch:
+        #    vec = np.searchsorted(feat_index, x) - 1
+        #    for index in order:
+        #        if sim_mat[vec][index] > thresh and index is not vec:
+        #            if feat_index[index] < (music.size - window_size):
+        #                x = feat_index[index]
+        #                break
+
+        #our issue is that we are trying to jump within a song as well as between two songs
+        #really it should only jump between one song or another.
+        #if we want to both jump within a song and between two songs, we need to pass a self sim for each song as well
+        #elif np.random.random() > jump:
+        if np.random.random() > jump:
             if track is 1:
                 music = track2
                 track = 2
@@ -314,13 +328,17 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
                 feat_index = feat_index_long
                 order = order_long
             vec = np.searchsorted(feat_index, x) - 1
+            #print "feat index size: ", feat_index.size, " vec: ", vec
+            #print "order size: ", order.size
+            #print "track is: ", track
             for index in order:
-                if track is 1:
+                if track is 2:
                     x = vec
                     y = index
                 else:
                     x = index
                     y = vec
+                #print "x: ", x, " y: ", y
                 if sim_mat[x][y] > thresh and index is not vec:
                     if feat_index[y] < (music.size - window_size):
                         x = feat_index[y]
