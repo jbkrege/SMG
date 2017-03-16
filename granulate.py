@@ -122,8 +122,8 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
     order = np.random.randint(sim_mat[-1].size, size=sim_mat[-1].size)
     #eventually these will be user defined
     branch = 0.3
-    thresh = 0.9
-    breakout = 0.8
+    thresh = 0.8
+    breakout = 0.9
     #END#
 
 
@@ -154,7 +154,7 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
 
     while output.size < output_len:
         #if we reached the end of the track, jump to a new place
-        if (x + grain_size) >= music.size:
+        if (x + window_size) >= music.size:
             x = np.random.randint(0, music.size/2)
         if grain_frac is 0:
             grain_size = int(sr*((0.1 - 0.01) * np.random.random())) #+ 0.01
@@ -244,7 +244,7 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
     branch = 0.3
     thresh = 0.8
     jump = 0.2
-    breakout = 0.8
+    breakout = 0.95
     #END#
 
 
@@ -282,6 +282,11 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
     feat_index = feat_index_long
     order = order_long
     track = 1
+
+    #music = track2
+    #feat_index = feat_index_short
+    #order = order_short
+    #track = 2
 
 
     while output.size < output_len:
@@ -354,10 +359,16 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
                 if sim_mat[x][y] > thresh and index is not vec:
                     if feat_index[y] < (music.size - window_size):
                         x = feat_index[y]
+                        #take the next grain from the nearest 10 feature vectors
+                        if y < feat_index.size - 5 and y > 5:
+                            x = np.random.randint(feat_index[y-5], feat_index[y+5])
+                        else:
+                            x = np.random.randint(feat_index[0], feat_index[feat_index.size-1])
                         break
 
         #break out of the same feature we are stuck in
         if np.random.random() > breakout:
+            print "breakout"
             x = np.random.randint(0, music.size)
 
 
@@ -367,7 +378,26 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
 
     return output
 
+def normalize_pair(song1, song2):
+    '''
+    INPUT:
+        song1, song2: the two signals you wish to be normalized
+    OUTPUT:
+        norm1, norm2: the two input track normalized based on the smaller max amplitude of the two tracks
+    '''
+    max1 = np.amax(song1)
+    max2 = np.amax(song2)
 
+    norm = min(max1, max2)
+
+    norm1 = song1 / norm
+    norm2 = song2 / norm
+
+    return norm1, norm2
+#@TODO
+#When we turn this into an object, just give it a file and it will default all the params so the file just plays normally
+#i.e. no overlap, grain size is some preset, window size is preset, window is 1, all randomness set to zero.
+#basically it will just tack on unwindowed grains in sequential order so it plays normally. then we can fuck with the params later
 
 if __name__ == "__main__":
 
