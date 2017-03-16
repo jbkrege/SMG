@@ -8,7 +8,7 @@ body{
 * { margin: 0; padding: 0; }
     
 html { 
-  background: url("/Users/Ben/Desktop/352EECS/SMG/Website/low_polygon_black_dark.jpg") no-repeat center center fixed;
+  background: url("low_polygon_black_dark.jpg") no-repeat center center fixed;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
