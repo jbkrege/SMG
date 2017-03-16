@@ -4,8 +4,8 @@ from simmatrix import *
 from granulate import *
 
 print "Load Music"
-song1, sr1 = librosa.load('forestsounds.wav')
-song2, sr2 = librosa.load('lux.wav')
+song1, sr1 = librosa.load('../twinpeaks.wav', duration=10)
+song2, sr2 = librosa.load('../distress.wav', duration=10)
 
 print "Compute Cepstral features"
 size = song1.size

@@ -1,10 +1,9 @@
 # This line is a convenience to import most packages you'll need. You may need to import others (eg random and cmath)
-import IPython, numpy as np, matplotlib.pyplot as plt, matplotlib, sklearn, librosa, cmath,math, scipy
+import IPython, numpy as np, sklearn, librosa, cmath, math, scipy
 from IPython.display import Audio
 from IPython.display import HTML
 
 # This line makes sure your plots happen IN the webpage you're building, instead of in separate windows.
-#%matplotlib inline
 
 def apply_style():
     """

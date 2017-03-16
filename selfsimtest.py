@@ -4,7 +4,7 @@ from simmatrix import *
 from granulate import *
 
 print "Load music"
-music, sr = librosa.load('misuse.wav')
+music, sr = librosa.load('twinpeaks.wav', sr=500, duration=30)
 
 print "Compute chroma features"
 chroma = librosa.feature.chroma_stft(music, sr)

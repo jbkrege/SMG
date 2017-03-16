@@ -1,4 +1,4 @@
-import IPython, numpy as np, matplotlib.pyplot as plt, matplotlib, sklearn, librosa, cmath,math, scipy, time
+import IPython, numpy as np, sklearn, librosa, cmath,math, scipy, time
 
 def sim_matrix(feature_vectors, sample_rate, hop_length, distance_metric = 'cosine', display = False):
     """
