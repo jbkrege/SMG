@@ -1,3 +1,4 @@
+
 import IPython, numpy as np, matplotlib.pyplot as plt, matplotlib, sklearn, librosa, cmath,math, scipy, time
 
 def one(n):
@@ -17,7 +18,6 @@ def granulate(music, sr, grain_frac, grains_per_window, overlap, output_size, wi
         output_size: the duration in seconds of the desired output
         window_type: what type of window will be applied to each grain.
             Options are Hann and Triangle as of now
-
     OUTPUT:
         output: A signal of duration output_size that starts from a random position in the song,
             and proceeds linearly through the song randomly selecting grains from the window and
@@ -81,7 +81,6 @@ def index_feature_vectors(num_feat_vecs, num_samples):
     INPUT:
         num_feat_vecs: the number of feature vectors computed from the features of a signal
         num_samples: the number of total samples in the signal
-
     OUTPUT:
         index: a mapping of where each feature vector starts in the terms of indices into the original signal
     '''
@@ -109,7 +108,6 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
         output_size: the duration in seconds of the desired output
         window_type: what type of window will be applied to each grain.
             Options are Hann and Triangle as of now
-
     OUTPUT:
         output: A signal of duration output_size that starts from a random position in the song,
             and proceeds linearly through the song randomly selecting grains from the window and
@@ -122,7 +120,7 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
     order = np.random.randint(sim_mat[-1].size, size=sim_mat[-1].size)
     #eventually these will be user defined
     branch = 0.3
-    thresh = 0.8
+    thresh = 0.4
     breakout = 0.9
     #END#
 
@@ -186,7 +184,6 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
         #break out of the same feature we are stuck in
         if np.random.random() > breakout:
             x = np.random.randint(0, music.size)
-
         x += grain_size
 
     return output
@@ -198,7 +195,8 @@ def granulate_selfsim(music, sim_mat, sr, grain_frac, grains_per_window, overlap
 #3 add pitch changing
 #2 implement randomness parameters (% randomness)
 
-def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_window, overlap, output_size, window_type = 'no window'):
+def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_window, overlap, output_size, window_type = 'no window',
+    branch = 0.3, thresh = 0.8, jump = 0.6, breakout = 1):
     '''
     INPUT:
         music: the input signal
@@ -213,7 +211,6 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
         output_size: the duration in seconds of the desired output
         window_type: what type of window will be applied to each grain.
             Options are Hann and Triangle as of now
-
     OUTPUT:
         output: A signal of duration output_size that starts from a random position in the song,
             and proceeds linearly through the song randomly selecting grains from the window and
@@ -232,8 +229,8 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
     feat_index_short = index_feature_vectors(sim_mat.shape[1], track2.size)
     feat_index_long = index_feature_vectors(sim_mat.shape[0], track1.size)
 
-    print "track1 size: ", track1.size
-    print "track2 size: ", track2.size
+    # print "track1 size: ", track1.size
+    # print "track2 size: ", track2.size
     #print sim_mat.shape
     #potentially create a new order every iteration
     order_short = np.random.randint(sim_mat.shape[1], size=sim_mat.shape[1])
@@ -241,15 +238,12 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
     order_long = np.random.randint(sim_mat.shape[0], size=sim_mat.shape[0])
     #print order_long.size
     #eventually these will be user defined
-    branch = 0.3
-    thresh = 0.8
-    jump = 0.2
-    breakout = 0.95
-    #END#
 
+    #END#
 
     output = np.array([0])
     output_len = output_size * sr
+    nbreak = 0 #A counter for how many times breakout was called
 
     if grain_frac > 0:
         grain_size = int(sr * grain_frac)
@@ -333,17 +327,19 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
         #really it should only jump between one song or another.
         #if we want to both jump within a song and between two songs, we need to pass a self sim for each song as well
         #elif np.random.random() > jump:
+            #potentially create a new order every iteration
+
         if np.random.random() > jump:
             if track is 1:
                 music = track2
                 track = 2
-                feat_index = feat_index_short
-                order = order_short
+                feat_index = index_feature_vectors(sim_mat.shape[1], track2.size)
+                order = np.random.randint(sim_mat.shape[1], size=sim_mat.shape[1])
             else:
                 music = track1
                 track = 1
-                feat_index = feat_index_long
-                order = order_long
+                feat_index = index_feature_vectors(sim_mat.shape[0], track1.size)
+                order = np.random.randint(sim_mat.shape[0], size=sim_mat.shape[0])
             vec = np.searchsorted(feat_index, x) - 1
             #print "feat index size: ", feat_index.size, " vec: ", vec
             #print "order size: ", order.size
@@ -355,7 +351,8 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
                 else:
                     x = index
                     y = vec
-                #print "x: ", x, " y: ", y
+                # print "x: ", x, " y: ", y
+                # print "matrix shape: ", sim_mat.shape
                 if sim_mat[x][y] > thresh and index is not vec:
                     if feat_index[y] < (music.size - window_size):
                         x = feat_index[y]
@@ -368,14 +365,12 @@ def granulate_crosssim(track1, track2, sim_mat, sr, grain_frac, grains_per_windo
 
         #break out of the same feature we are stuck in
         if np.random.random() > breakout:
-            print "breakout"
+            nbreak +=1
             x = np.random.randint(0, music.size)
-
-
         x += grain_size
 
 
-
+    print "Breakout called", nbreak, "times"
     return output
 
 def normalize_pair(song1, song2):
