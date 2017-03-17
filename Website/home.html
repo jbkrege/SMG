@@ -10,11 +10,6 @@
 </title>
 </head>
 
-<!-- <script type="text/javascript">
-<body onload="myFunction()">('#abstract').innerHTML = .load("/Users/Ben/Desktop/352EECS/SMG/Website/abstract.txt");
-</script> -->
-
-
 <body>
   <h1>
     S<small>imilarity</small> M<small>atrix</small> G<small>ranulator</small>
@@ -31,26 +26,102 @@
         Our innovation is to use a similarity matrix to choose grains that are similar to previous ones played.
       </p>
       <p>
+      <br><br><b> Why </b><br><br>
+      
+        SMG allows the creation of unique blends of sounds.
+        By using a cross similarity matrix, two sounds can be blended together such that similar grains 
+        from both sources are juxtaposed, forming a unification of the two.
+
+        <br><br>
+        For example, here is a mixture of Chopan's Raindrop Prelude with a found rain sample using chroma features.<br>
+        The prelude:<br>
+        <img src="graphs/raindroppreludespectrogram.png"><br>
+        Rain:  It is fascinating how much this spectrum looks like rain on a glass window. <br>
+        <img src="graphs/rainspectrogram.png"><br>
+        Combined: Note the similarities to both previous spectrograms. Low frequency rumbling at the bottom and virtical streaks are present from the rain spectrogram. From the piano, we get horizontal notes, and a continuous drone one third from the bottom.<br> 
+        <img src="graphs/rainandraindropprelude.png"><br>
+        See the downloads section if you'd like to give this a listen. 
+        <br><br>
+        <b>SMG can be used as a time stretch.</b><br>
+        Like other granular synthesizers, SMG can produce a longer sample by overlapping long grains.
+        The similarity matrix  allows the sound to unfold uniformly.<br>
       <br><br><b> How it works </b><br><br>
-        blah blah blah<br>
-        ~graph~<br>
-        ~graph~<br>
-      <br><br><b> Suggestions for use </b><br><br>
-        blah blah blah
+        <ol>
+          <li>Take input sounds files, and any desired user parameters, such as grain density, grain length
+          <li>Extract Desired features from the input signals. Can be Cepstra or Chroma, with desired distance measures
+          <li>Compute Similarity Matrix at the level of feature vector
+          <li>Starting at a random position in the first loaded track, the algorithm chooses a grain from a           
+      preset, or adjustable, window size. The grain is then windowed using a desired windowing   
+      function (Hann, Tukey, etc), and stitched into the output file with a given overlap.
+          <li> Return an output of the desired length, granulated to the desired parameters.
+        </ol>
+        <br>
+        <img src="graphs/preludesimmatbest.png">
+        <br>
+        <b>Grain Selection Process</b><br>
+          The grain selection process utilizes a cross- or self-similarity matrix. A self-similarity matrix of the Chopan Raindrop Prelude is depicted above. Based on the current grain, a new 
+          grain is selected if it surpasses the threshold. With a high threshold, it can get locked into playing
+          a sort of mean of both sources that repeats. In an effort to combat this, we add a breakout factor to sometimes
+          move the selection window to a totally different part of the song.<br><br>
+<!--    INSERT GRAPH      -->
+        <b>Working around limitations of the STFT</b><br>
+          Similarity matrices rely on the output of a short term fourier transform. 
+        To get appropriate frequency resolution (which is windowSize/2) and manage matrix use of memory,
+        the window must be an appropriate size.
+        A compromise between precision of grain data and better frequency resolution and memory use is found
+        around 512 samples, much larger than a typical grain. Thus, when grains are selected, we select randomly within the matching feature vector. 
+
+        
+      <br><br><b> Results/Suggestions for use </b><br><br>
+        <b>Cepstral and Chroma representations are both useful to hone the sound.</b><br>
+SMG allows the user to choose between two feature extractions methods, Cepstra and Chroma, to give them more control over the sound.
+The choice between the two must be evaluated based on the source content. If the sources are tonal, and the desired result is also tonal, then extracting chroma features is the best option.
+A step we could tke in the future to advance this program is to transpose one of the samples eleven times, and make similarity matrices comparing the second sample to each of the transposed versions of the first. This would make more similarity in the chroma domain, which would make more grains available for the granulator to choose from, and the choices may make more harmonic sense. For example, two grains that contain I chords would match up only after transposition.
+If the source files or desired output is more rhythmic or textural, cepstra features yield a better result.
+Cepstra produced noticeably better results with source source sounds with lots of transience. For example, Fire Crackling + a Bartok pizzicato movement worked very well.
+        <br><br>
+        <b>Choice of distance measure impacts results.</b><br>
+The authors observed qualitative differences between sounds produced using the three common distance measures, cosine, euclidean, and manhattan, used for computing an audio similarity matrix. Cosine distance ignores amplitude differences, and resulting textures can have unexpected volume spikes. However, if input files are at similar volumes, cosine distance can be effective. Euclidean and manhattan distance measures react strongly to volume, and while using them can prevent volume spikes or drops, large changes in amplitude can dominate over the targeted features. 
       <br><br><b> Downloads </b><br><br>
-      </p>
-        <a href = "/FILEPATH OF ZIP">
-          <button>Download Zip of Compiled Files</button><br>
-        </a>
-        <a href = "/FILEPATH OF POSTER">
-          <button>Download Poster</button>
-        </a>
-      <p>
+ 
+        <button><a href = "https://drive.google.com/uc?export=download&id=0B0r0cwDhNewgTExMQ0EyUlNvc28">&emsp; Zip of Compiled Files &emsp;</a></button>
+        &emsp;
+        <button><a href = "https://drive.google.com/uc?export=download&id=0B0r0cwDhNewgRUtYMThnY1NhNDA"> &emsp;Poster&emsp;</a></button>
+        &emsp;
+        <button><a href = "https://drive.google.com/uc?export=download&id=0B0r0cwDhNewgRzRRdUlmUDEyVDg"> &emsp;Rainy Prelude &emsp;</a></button> 
+        &emsp;
+        <button><a href = "https://drive.google.com/uc?export=download&id=0B0r0cwDhNewgSEU5Wk1BQjB5cHM">&emsp; Fire+Bartok &emsp;</a></button> 
+
       <br><br>The Team <br><br>
+        <b>John “Ben” Krege</b><br>
+        JohnKrege2018@u.northwestern.edu<br>
+        317-775-0018<br><br>
+
+        <b>Clay Kauzlaric</b><br>
+        ClayKauzlaric2018@u.northwestern.edu<br>
+         815-341-0092<br><br>
+
+        <b>Pawel Klim</b><br>
+        PawelKlim2018@u.northwestern.edu<br>
+        837-436-6033<br><br>
+
+        <b>Advisor:<br>
+        Prem Seetharaman</b><br>
+        PremSeetharaman2009@u.northwestern.edu<br><br>
+
+        <b>Instructor:<br>
+        Bryan Pardo</b><br>
+        Pardo@northwestern.edu<br>
+        847.491.7184<br>
+      <br>
+      <br>
+      <br>
+      <small style="text-align:center;">This project was undertaken in partial fulfillment of the requirements for EECS 352.</small>
+      <br>
+      <br>
       </p>
       </span>
     </div>
   </div>
-  <script type = "text/javascript" src = "SignInScript.js"></script>
 </body>
 </html>
