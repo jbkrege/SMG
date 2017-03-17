@@ -17,6 +17,8 @@ class Granulator:
 	thresh = .8
 	jump = .6
 	breakout = 1
+	level1 = 1
+	level2 = 1
 
 	def __init__(self, source1, source2, features = 0, grain_len = .1, grains_per_window = 50, overlap = .5, output_size = 30, window_type = "tukey"):
 		self.source1 = source1
@@ -32,6 +34,25 @@ class Granulator:
 		self.window_type = window_type
 		print "Granulator initialized and ready to rock."
 
+	def man(self):
+		print "run: Makes output file and saves it at destination"
+		print "Print: Prints the current state of all vars"
+		print "load: takes two source files and precomputes necessary files"
+		print "setGrainlen"
+		print "setWindowlen"
+		print "setWindowtype"
+		print "setSource1"
+		print "setSource2"
+		print "setOverlap"
+		print "setDestination"
+		print "setBranch"
+		print "setThresh"
+		print "setJump"
+		print "setBreakout"
+		print "setDistance"
+		print "setLevel1. A multiplier on source 1's amplitudes. For use with mixing"
+		print "setLevel2"
+
 	def setGrainlen(self, new):
 		self.grain_len = new
 	def setWindowlen(self, new):
@@ -39,10 +60,10 @@ class Granulator:
 	def setWindowtype(self, new):
 		self.window_type = new
 	def setSource1(self, new):
-		self.load(self, new, self.source2)
+		self.load(new, self.source2)
 		self.setFeatures()
 	def setSource2(self, new):
-		self.load(self, self.source1, new)
+		self.load( self.source1, new)
 		self.setFeatures()
 	def setOverlap(self, new):
 		self.overlap = new
@@ -58,6 +79,10 @@ class Granulator:
 		self.breakout = new
 	def setDistance(self, distancem):
 		Granulator.distance_metric = distancem
+	def setLevel1(self, new):
+		self.level1 = new
+	def setLevel2(self, new):
+		self.level2 = new
 
 	def Print(self):
 		print "Source1: ", self.source1
@@ -76,12 +101,15 @@ class Granulator:
 		print "Similarity threshold: ", self.thresh
 		print "Jumping probability: ", self.jump
 		print "Breakout: ", self.breakout
+		print "Level 1: ", self.level1
+		print "Level 2:", self.level2
 
 	def run(self, output_file = 'none'):
 		if output_file != 'none':
 			self.destination = output_file
 		if self.source2:
-			ret = granulate_crosssim(self.song1, self.song2, self.crosssim, self.sr1, self.grain_len,
+			ret = granulate_crosssim(self.song1*self.level1, self.song2*self.level2,
+			 self.crosssim, self.sr1, self.grain_len,
 			 self.grains_per_window, self.overlap, self.output_size, self.window_type,
 			 self.branch, self.thresh, self.jump, self.breakout)
 			librosa.output.write_wav(str(self.destination), ret, self.sr1)
