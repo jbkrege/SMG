@@ -11,7 +11,9 @@ html {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  }
+   color: rgb(128,128,128);
+  text-align: left;
+}
     
 
 
@@ -30,23 +32,23 @@ html {
   opacity: 1;
   background-color: red /*rgba(0,0,0,.1)*/;
   margin: 30px;
-  text-align: center;
+  text-align: left;
   height:100%;
   width: 100%;
 }
 .middle{ /*Middle of screen for SignIn*/
 	position: absolute;
- 	top: 60%;
+ 	top: 210%;
 	left: 50%;
   transform: translate(-50%, -50%);
 	border-radius: 10px;
 	width: 80%;
-	height: 80%;
+	height: 375%;
  	opacity: 1;
   background-color: rgba(8,8,8,.8);
 /* 	margin: 30px;*/
   padding: 40px;
-  text-align: center;
+  text-align: left;
 }
 
 small {
@@ -80,7 +82,7 @@ p{
 }
 
 h2{
-  text-align: center;
+  text-align: left;
   font-size: 15px;
   color: grey;
   opacity: 1;
@@ -104,6 +106,16 @@ button{
 button:hover{
   color: white;
   background-color: darkblue;
+}
+
+a{
+  color: rgb(128,128,128);
+}
+
+img{
+  width: 70%;
+  display: block;
+  margin: auto;
 }
 
 .group{
