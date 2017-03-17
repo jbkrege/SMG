@@ -35,11 +35,11 @@
         <br><br>
         For example, here is a mixture of Chopan's Raindrop Prelude with a found rain sample using chroma features.<br>
         The prelude:<br>
-        <img src="graphs/raindroppreludespectrogram.png"><br>
+        <img src="support/raindroppreludespectrogram.png"><br>
         Rain:  It is fascinating how much this spectrum looks like rain on a glass window. <br>
-        <img src="graphs/rainspectrogram.png"><br>
+        <img src="support/rainspectrogram.png"><br>
         Combined: Note the similarities to both previous spectrograms. Low frequency rumbling at the bottom and virtical streaks are present from the rain spectrogram. From the piano, we get horizontal notes, and a continuous drone one third from the bottom.<br> 
-        <img src="graphs/rainandraindropprelude.png"><br>
+        <img src="support/rainandraindropprelude.png"><br>
         See the downloads section if you'd like to give this a listen. 
         <br><br>
         <b>SMG can be used as a time stretch.</b><br>
@@ -56,14 +56,14 @@
           <li> Return an output of the desired length, granulated to the desired parameters.
         </ol>
         <br>
-        <img src="graphs/preludesimmatbest.png">
+        <img src="support/preludesimmatbest.png">
         <br>
         <b>Grain Selection Process</b><br>
           The grain selection process utilizes a cross- or self-similarity matrix. A self-similarity matrix of the Chopan Raindrop Prelude is depicted above. Based on the current grain, a new 
           grain is selected if it surpasses the threshold. With a high threshold, it can get locked into playing
           a sort of mean of both sources that repeats. In an effort to combat this, we add a breakout factor to sometimes
           move the selection window to a totally different part of the song.<br><br>
-<!--    INSERT GRAPH      -->
+
         <b>Working around limitations of the STFT</b><br>
           Similarity matrices rely on the output of a short term fourier transform. 
         To get appropriate frequency resolution (which is windowSize/2) and manage matrix use of memory,
