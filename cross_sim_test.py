@@ -4,8 +4,8 @@ from simmatrix import *
 from granulate import *
 
 print "Load Music"
-song1, sr1 = librosa.load('../twinpeaks.wav', duration=10)
-song2, sr2 = librosa.load('../distress.wav', duration=10)
+song1, sr1 = librosa.load('../sounds/birds.wav')
+song2, sr2 = librosa.load('../sounds/fireplace.wav')
 
 print "Compute Cepstral features"
 size = song1.size
@@ -26,4 +26,4 @@ print "Run SelfSim Granulator"
 test = granulate_crosssim(song1, song2, crosssim, sr1, 0, 200, 0, 30, 'hann')
 
 print "write output to wav"
-librosa.output.write_wav('crosstest.wav', test, sr1)
+librosa.output.write_wav('crosstest_02.wav', test, sr1)
