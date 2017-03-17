@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 import IPython, numpy as np, sklearn, librosa, cmath,math, scipy, time
-=======
-
-import IPython, numpy as np, matplotlib.pyplot as plt, matplotlib, sklearn, librosa, cmath,math, scipy, time
->>>>>>> cf7b580a1a74ee469af817a3c450724eb1df3202
 
 def one(n):
     return 1
