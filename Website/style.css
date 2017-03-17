@@ -1,14 +1,13 @@
 body{
   font-family: 'Roboto', sans-serif;
   text-align: center;
-  background-image: url("/Users/Ben/Desktop/352EECS/SMG/Website/low_polygon_black_dark.jpg")
 }
 
 
 * { margin: 0; padding: 0; }
     
 html { 
-  background: url("low_polygon_black_dark.jpg") no-repeat center center fixed;
+  background: url("support/low_polygon_black_dark.jpg") no-repeat center center fixed;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
