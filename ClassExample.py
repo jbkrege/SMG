@@ -1,13 +1,12 @@
 from Granulator import *
 
-g = Granulator('../sounds/birds.wav','../sounds/fireplace.wav')
-g.Print()
-g.run("../sounds/birds_fireplace.wav")
+#g = Granulator('../sounds/reich.wav','../sounds/phaedra.wav')
+g = Granulator('../sounds/reich.wav','../sounds/reich.wav')
 
-g.setGrainlen(0.5)
+g.setFeatures(0)
 g.Print()
-g.run("../output/birds_fireplace_long_grain.wav")
+g.run("../output/reich_chroma.wav")
 
-g.setGrainlen(0.02)
+g.setFeatures(1)
 g.Print()
-g.run("../output/birds_fireplace_short_grain.wav")
+g.run("../output/reich_mfcc.wav")
