@@ -40,7 +40,7 @@
         <img src="support/rainspectrogram.png"><br>
         Combined: Note the similarities to both previous spectrograms. Low frequency rumbling at the bottom and virtical streaks are present from the rain spectrogram. From the piano, we get horizontal notes, and a continuous drone one third from the bottom.<br> 
         <img src="support/rainandraindropprelude.png"><br>
-        See the downloads section if you'd like to give this a listen. 
+        <audio controls><source src="/support/chopin" type="audio/wav">Your browser does not support the audio element.</audio>
         <br><br>
         <b>SMG can be used as a time stretch.</b><br>
         Like other granular synthesizers, SMG can produce a longer sample by overlapping long grains.
@@ -58,10 +58,6 @@
         <br>
         <img src="support/preludesimmatbest.png">
         <br>
-        <audio controls>
-        <source src="support/chopin" type="audio/wav">
-        Your browser does not support the audio element.
-        </audio>
         <b>Grain Selection Process</b><br>
           &emsp;The grain selection process utilizes a cross- or self-similarity matrix. A self-similarity matrix of the Chopan Raindrop Prelude is depicted above. Based on the current grain, a new 
           grain is selected if it surpasses the threshold. With a high threshold, it can get locked into playing
@@ -94,7 +90,7 @@ Cepstra produced noticeably better results with source source sounds with lots o
         <b>Choice of distance measure impacts results.</b><br>
 The authors observed qualitative differences between sounds produced using the three common distance measures, cosine, euclidean, and manhattan, used for computing an audio similarity matrix. Cosine distance ignores amplitude differences, and resulting textures can have unexpected volume spikes. However, if input files are at similar volumes, cosine distance can be effective. Euclidean and manhattan distance measures react strongly to volume, and while using them can prevent volume spikes or drops, large changes in amplitude can dominate over the targeted features.
         
-        <br><br><b>Conclusion/Results</b><br><br>
+        <br><br><b>Conclusion/Results</b>
         <br><br>&emsp; With this project we were mainly concerned with 
         exploring whether the addition significantly improved the sound possibilities. While we have no study data to empirically
         give evidence to this, we believe that it does.
