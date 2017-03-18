@@ -59,21 +59,28 @@
         <img src="support/preludesimmatbest.png">
         <br>
         <b>Grain Selection Process</b><br>
-          The grain selection process utilizes a cross- or self-similarity matrix. A self-similarity matrix of the Chopan Raindrop Prelude is depicted above. Based on the current grain, a new 
+          &emsp;The grain selection process utilizes a cross- or self-similarity matrix. A self-similarity matrix of the Chopan Raindrop Prelude is depicted above. Based on the current grain, a new 
           grain is selected if it surpasses the threshold. With a high threshold, it can get locked into playing
           a sort of mean of both sources that repeats. In an effort to combat this, we add a breakout factor to sometimes
           move the selection window to a totally different part of the song.<br><br>
+        
+        <b>Build</b><br>
+        &emsp;The code base for this project draws from a variety of class topics as well as literature on granular synthesis.
+Librosa, Numpy, and Scipy are key libraries that provide feature extraction capabilities, matrix manipulation, and windowing functions.
+We utilized similarity matrix and cross similarity matrix functions we made for an infinite jukebox for Homework 5. Our main workhorse function, granulate, combines
+the core capabilities of various granular synthesis algorithm implementations with elements from the infinite jukebox concept. These functions are brought together by the
+main object class, Granulator, that contains a variety of parameters for user control and modification of the output, and also makes for a much cleaner user interface to the python command line.
 
         <b>Working around limitations of the STFT</b><br>
-          Similarity matrices rely on the output of a short term fourier transform. 
+         &emsp; Similarity matrices rely on the output of a short term fourier transform. 
         To get appropriate frequency resolution (which is windowSize/2) and manage matrix use of memory,
         the window must be an appropriate size.
         A compromise between precision of grain data and better frequency resolution and memory use is found
         around 512 samples, much larger than a typical grain. Thus, when grains are selected, we select randomly within the matching feature vector. 
 
         
-      <br><br><b> Results/Suggestions for use </b><br><br>
-        <b>Cepstral and Chroma representations are both useful to hone the sound.</b><br>
+      <br><br><b>Suggestions for use </b><br><br>
+        <b>Cepstral and Chroma representations are both useful to hone the sound.</b><br>&emsp;
 SMG allows the user to choose between two feature extractions methods, Cepstra and Chroma, to give them more control over the sound.
 The choice between the two must be evaluated based on the source content. If the sources are tonal, and the desired result is also tonal, then extracting chroma features is the best option.
 A step we could tke in the future to advance this program is to transpose one of the samples eleven times, and make similarity matrices comparing the second sample to each of the transposed versions of the first. This would make more similarity in the chroma domain, which would make more grains available for the granulator to choose from, and the choices may make more harmonic sense. For example, two grains that contain I chords would match up only after transposition.
@@ -81,7 +88,25 @@ If the source files or desired output is more rhythmic or textural, cepstra feat
 Cepstra produced noticeably better results with source source sounds with lots of transience. For example, Fire Crackling + a Bartok pizzicato movement worked very well.
         <br><br>
         <b>Choice of distance measure impacts results.</b><br>
-The authors observed qualitative differences between sounds produced using the three common distance measures, cosine, euclidean, and manhattan, used for computing an audio similarity matrix. Cosine distance ignores amplitude differences, and resulting textures can have unexpected volume spikes. However, if input files are at similar volumes, cosine distance can be effective. Euclidean and manhattan distance measures react strongly to volume, and while using them can prevent volume spikes or drops, large changes in amplitude can dominate over the targeted features. 
+The authors observed qualitative differences between sounds produced using the three common distance measures, cosine, euclidean, and manhattan, used for computing an audio similarity matrix. Cosine distance ignores amplitude differences, and resulting textures can have unexpected volume spikes. However, if input files are at similar volumes, cosine distance can be effective. Euclidean and manhattan distance measures react strongly to volume, and while using them can prevent volume spikes or drops, large changes in amplitude can dominate over the targeted features.
+        
+        <br><br><b>Conclusion/Results</b><br><br>
+        <br><br>&emsp; With this project we were mainly concerned with 
+        exploring whether the addition significantly improved the sound possibilities. While we have no study data to empirically
+        give evidence to this, we believe that it does.
+        Other algorithms may improve on what we have created in the past two weeks.
+        None of the authors have much experience with machine learning, and 
+        they have never to our knowledge been applied to granular synthesis, but the idea of a long short term memory network trained 
+        with data on grains level is intriguing.
+        Bringing this up to speed with current technology would help too.
+        Granulators currently on the market have more control over randomization, the
+        ability to transition fluidly from one parameter set to another, and the ability to save parameter presets. This
+        could be accomplished by integrating a similarity matrix to another existing platform, but it may not be difficult to do this
+        from scratch. The authors believe that the addition of a similarity matrix to a more robust granular synthesizer 
+        could bring additional control and creative possibilities to granular synthesis.
+
+        
+        
       <br><br><b> Downloads </b><br><br>
  
         <button><a href = "https://drive.google.com/uc?export=download&id=0B0r0cwDhNewgTExMQ0EyUlNvc28">&emsp; Zip of Compiled Files &emsp;</a></button>
@@ -90,10 +115,11 @@ The authors observed qualitative differences between sounds produced using the t
         &emsp;
         <button><a href = "https://drive.google.com/uc?export=download&id=0B0r0cwDhNewgRzRRdUlmUDEyVDg"> &emsp;Rainy Prelude &emsp;</a></button> 
         &emsp;
-        <button><a href = "https://drive.google.com/uc?export=download&id=0B0r0cwDhNewgSEU5Wk1BQjB5cHM">&emsp; Fire+Bartok &emsp;</a></button> 
+        <button><a href = "https://drive.google.com/uc?export=download&id=0B0r0cwDhNewgSEU5Wk1BQjB5cHM">&emsp; Fire+Bartok &emsp;</a></button>
+         &emsp;
 
       <br><br>The Team <br><br>
-        <b>John “Ben” Krege</b><br>
+        <b>Ben Krege</b><br>
         JohnKrege2018@u.northwestern.edu<br>
         317-775-0018<br><br>
 
