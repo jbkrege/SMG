@@ -16,6 +16,15 @@ html {
 }
     
 
+.rotate {
+  -webkit-transform:rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
 
 /*#page-wrap { 
   width: 400px; 
