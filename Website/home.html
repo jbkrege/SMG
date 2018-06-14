@@ -4,7 +4,7 @@
   <link rel = "stylesheet" type = "text/css" href = "style.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 <title>
-  ORPHEUS 2.0
+  <br> ORPHEUS 2.0
 </title>
 </head>
 
@@ -20,7 +20,7 @@
       <b>Introduction and Overview</b><br><br>
         
 Electronic musicians give notoriously boring performances, offering audiences only the top of their heads while they twist knobs and occasionally shout incoherently into a microphone. Common complaints of live electronic performances include variants on “it was more of a light show than a musical performance.” The void of visual content in contemporary electronic music performance has opened because the tasks an electronic musician must perform (like cueing tracks and playing melodies on a midi controller) are difficult to make visible to a large audience. Enter Orpheus. Orpheus is a table top laser harp-styled MIDI controller that provides one and a half octaves of notes and continuous gestural control of the resulting sound. Sensors positioned at either end of Orpheus triangulate the position of the hands over the instrument, giving the user continuous control in the form of MIDI data. The resultant customizable CC mappings allow musicians to access parameters commonly manipulated in electronic music. Most laser harps are projected from the floor with a single laser that is fanned into many separate beams by a stepper motor, and must be played while standing away from the rest of an artists rig. Orpheus’s table top design will allow it to integrate with other MIDI and DJ controllers, while fitting with the laser-light-show aesthetic and filling the void of visual performance.
-
+<br>
 Our aim is to design a controller which should be adaptable to a variety of musical styles, but is mostly oriented towards electronic musicians and DJs. The bombastic laser array fits in well with already existing light shows of live electronic performances, and its small form and MIDI control means Orpheus should integrate easily with the production and performance workflows of electronic musicians. Because the MIDI control is quite flexible, we hope that other musicians might want to find space for Orpheus in their productions and performances.
       
       </p>
@@ -28,12 +28,13 @@ Our aim is to design a controller which should be adaptable to a variety of musi
       <b>The Laser Array</b><br><br>
    
 The laser array is the heart and soul of Orpheus. It consists of 16 independently controlled lasers in 11 laser housings, and for each of these an associated MIDI trigger event that occurs when the musician intersects the beam of the laser with the hand. Each laser housing holds at least one red laser, and five selected housings also hold an additional blue laser whose purpose is to provide a frame of reference so that the musician can easily identify the position of a particular laser in reference to the others. Underpinning the array is a complex circuit composed of logical gates, transistors, multiplexers, and switches. Each of these devices serves to control which laser is currently active and to allow the musician to specify whether the referential blue lasers should be active.
-
+<br>
 Orpheus differs from other previously existing laser harps in that the laser array is designed to be “infinite scrolling.” Other designs frequently feature sensors directly opposite the laser beam. In these designs, the intersection of the musician’s hand is detected by identifying the lack of light entering the opposing sensor. In particular, these designs require that an array of sensors be placed above the array of lasers, which increases the size of the overall product. We chose an infinite scrolling design--one in which the laser beams themselves are allowed to extend indefinitely. The intersection of the musician’s hand with a beam is identified instead by the reflection of the laser off the palm back onto the device itself. This considerably reduces the size of the device by removing the frame of opposing sensors.
-
+<br>
 However, the issue of detection becomes more difficult in such an infinite scrolling design. Previous iterations of Orpheus involved detection of the reflection off the palm through infrared sensors. These are relatively inexpensive sensors with a narrow detection width, which made them good candidates as the reflection off the palm from neighboring laser beams would have a low impact on an infrared sensor. However, the use of fog effects is critical to allowing the full visual impact of the lasers, since the beams are difficult to see without something more opaque floating in the space above. This fog introduced high amounts of noise into the detection methods, in the end proving that the utility of infrared sensors for laser beam detection is limited by the performance contexts.
-
+<br>
 This iteration of Orpheus forgoes the infrared detection methods in favor of an array of light-collecting diodes. These diodes operate in much the same manner as the common light-emitting diode, but instead measure the incoming luminescence. Each laser housing contains, beyond the lasers, a light-collecting diode which is recessed into the casing. The reflection of a laser beam off the palm is detected by the light-collecting diode next to the laser, and recessing the diodes helps to minimize reflection from neighboring beams or the ambient light of the environment. Tuning the detection of these devices has proven challenging. We had to rely on operational amplifier circuits to best tune the outcoming signal, attenuating noise and identifying the intersection of the associated beam.
+<br>
 Importantly, the laser circuitry operates best at five volts. We had originally selected the Teensy 3.5 as the central microcontroller for Orpheus, but later discovered that the overall laser intensity was not bright enough, as this controller operates at 3.3 volts. Instead, we chose an earlier version of the Teensy microcontroller, the 2.0, as the central controller for the laser array. This microcontroller operates at 5 volts, at the cost of lower overall computational power. For this portion of the project, high computational power was of less importance, and so the increased voltage and decreased size of the Teensy 2.0 proved to be more ideal for laser operation and detection.
 
       </p>
@@ -42,19 +43,19 @@ Importantly, the laser circuitry operates best at five volts. We had originally 
         
 
 Orpheus was first conceived as an instrument in two parts. The array of lasers allows the musician 11 distinct MIDI trigger events, which are most obviously used to trigger notes, though more creative or experimental triggers could also be used. However, any musician knows that continuous modulation of sound is an integral part of creating a musically interesting result. In more traditional contexts, this modulation might be the vibrato imparted by a violinist’s fingers or the fine adjustment in a trombonist’s embouchure. In the case of Orpheus, a natural map for this continuous modulation is the height of the musician’s hand above the device. We might imagine a performance where the musician intersects a laser to produce a deep bass note, and then moves their hand down the beam of the laser to continuously shift the pitch further and further down (from here, perhaps the sound ceases when the musician removes their hand from the current laser to intersect another with the same continuous pitch modulation, repeating this process to create a groovy bassline). Perhaps instead, the height of the hand does not correspond to a shift in pitch but rather the cutoff of a filter or the width and overall mix of a delay. The nature of Orpheus as a MIDI controller means that this continuous modulation should be decoupled from the specifically triggered event that results from intersecting a particular laser.
-
+<br>
 Some methods of laser detection inherently allowed for detection of the height of the hand through the intensity of the sensor output. Infrared detection and light-collecting diode detection, for example, offered this capability, but the aforementioned desire to use fog effects to better illuminate the lasers introduced high amounts of noise. As a result, using these sensors to accurately detect the height or position of the hand above the device was unsuccessful. Instead, we had to turn to other methods.
-
+<br>
 Our first ideas involved two bluetooth transceivers positioned at the two ends of the device, and a third placed on the hand of the performer. Theoretically, by measuring the intensity of signals passed between the transceivers we could get an estimation of the distance between the hand and the two bluetooth modules placed inside the casing. Using this data, the position of the hand can be determined through triangulation. This would give an approximate location of the hand in the space above the harp, thus providing the necessary data to implement the continuous control based on height.
-
+<br>
 However, bluetooth technology does not provide adequate accuracy in a musical context. For Orpheus, we needed high degrees of accuracy so as to allow for expressive yet nuanced continuous control. As a result, we had to look into other detection options. 
-
+<br>
 In doing so, we stumbled upon a new and rather experimental technology known as “ultra-wideband.” In essence, ultra-wideband (UWB)  operates in the same manner as Bluetooth, but encodes precise timing information in the pulses of the signal. As the name suggests, UWB operates in a wide bandwidth which is not utilized by other technologies. UWB is therefore more resistant to impedance effects such as those introduced by fog or any number of props which may be used in a musical performance. 
-
+<br>
 UWB is a new technology, pioneered by the manufacturer DecaWave. This company produces a small variety of integrated circuits that operate in the ultra-wideband range. Their primary device, the DW1000, is designed for more industrial settings than the project here, and requires more professional circuit building techniques than we had available. Luckily, DecaWave produces a related module, the DWM1000, which is more user friendly and exposes the pins of the DW1000 module while simultaneously integrating an antenna with the device. We chose the DWM1000 module as the candidate for our continuous control because it allowed for easier soldering to adapter PCBs.
-
+<br>
 Even still, soldering these modules proved to be a challenge. The DWM1000 features castellated solder pins, which are small and positioned in close proximity to one another. We experimented in using solder paste to attach the modules to their adapter PCBs, but discovered that without taking necessary precautions---like clamping the boards to the PCBs---using solder paste has a high likelihood of flooding beneath the chips and causing short circuits. Using appropriate clampings seems to mitigate this issue, but we also experimented with a traditional soldering operation. This method, given an appropriately fine-tipped soldering iron and steady hand, is probably more reliable as the solder cannot flow as freely as solder paste.
-
+<br>
 Unfortunately, the operation of these modules is 
 
       </p>
