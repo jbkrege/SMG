@@ -25,7 +25,7 @@ Our aim is to design a controller which should be adaptable to a variety of musi
       
       </p>
       <p>
-      <b>The Laser Array</b><br><br>
+      <br><b>The Laser Array</b><br><br>
    
 The laser array is the heart and soul of Orpheus. It consists of 16 independently controlled lasers in 11 laser housings, and for each of these an associated MIDI trigger event that occurs when the musician intersects the beam of the laser with the hand. Each laser housing holds at least one red laser, and five selected housings also hold an additional blue laser whose purpose is to provide a frame of reference so that the musician can easily identify the position of a particular laser in reference to the others. Underpinning the array is a complex circuit composed of logical gates, transistors, multiplexers, and switches. Each of these devices serves to control which laser is currently active and to allow the musician to specify whether the referential blue lasers should be active.
 <br>
@@ -39,7 +39,7 @@ Importantly, the laser circuitry operates best at five volts. We had originally 
 
       </p>
       <p>
-      <b>Ultra-wideband position detection</b><br><br>
+      <br><b>Ultra-wideband position detection</b><br><br>
         
 
 Orpheus was first conceived as an instrument in two parts. The array of lasers allows the musician 11 distinct MIDI trigger events, which are most obviously used to trigger notes, though more creative or experimental triggers could also be used. However, any musician knows that continuous modulation of sound is an integral part of creating a musically interesting result. In more traditional contexts, this modulation might be the vibrato imparted by a violinist’s fingers or the fine adjustment in a trombonist’s embouchure. In the case of Orpheus, a natural map for this continuous modulation is the height of the musician’s hand above the device. We might imagine a performance where the musician intersects a laser to produce a deep bass note, and then moves their hand down the beam of the laser to continuously shift the pitch further and further down (from here, perhaps the sound ceases when the musician removes their hand from the current laser to intersect another with the same continuous pitch modulation, repeating this process to create a groovy bassline). Perhaps instead, the height of the hand does not correspond to a shift in pitch but rather the cutoff of a filter or the width and overall mix of a delay. The nature of Orpheus as a MIDI controller means that this continuous modulation should be decoupled from the specifically triggered event that results from intersecting a particular laser.
