@@ -22,14 +22,17 @@
       </div>
         <br>
         <iframe align="center" width="560" height="315" src="https://www.youtube.com/embed/-Hx-Fstasjc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        <br>
+  
+  <br><br>
 
   <b style = "color:white">Table of Contents:</b>
   <ul style = "color:white">
-    <li><a href="#intro">   Introduction and Overview</a></li>
-    <li><a href="#circuit"> Circuitry</a></li>
+    <li><a href="#intro">    Introduction and Overview</a></li>
+    <li><a href="#case">     Enclosure Design</a></li>
+    <li><a href="#circuit">  Circuitry</a></li>
     <li><a href="#uwb">      Ultra-wideband Position detection</a></li>
-    <li><a href="#code">     Code  </a></li>
+    <li><a href="#code">     Code   </a></li>
+    <li><a href="#lessions"> Lessons Learned  </a></li>
     <li><a href="#creds">    The Team</a></li>
   </ul>
   <p style = "color: white">
@@ -49,6 +52,58 @@ This iteration of Orpheus forgoes the infrared detection methods in favor of an 
 <br><br>
       </p>
       <p style = "color: white">
+
+<a name="case"></a>
+<b>Enclosure Design</b><br><br>
+
+We believe that good design hides complexity within order. Orpheus's enclosure, on the macro level, is a simple rectangular prism. Then you look at the edges and see the complexity in the box joints. Acrylic is strong, stiff, easily machined, and aesthetically beautiful.
+
+<img src="edges.JPG" class = "rotate" style = "height: 200px, width: 100px"> 
+There is something about this design that we find incredibly appealing. It is also practical and functional, adding significant structural integrity by introducing more surface area for the epoxy to adhere to, and reducing the stress on the epoxy joints by transfering pressure into the acrylic. 
+<br><br>
+
+First, the designs were drawn isometrically on graph paper. The box joints were both for aesthetic and strength. Note the drawings of a different photodiode that we did not end up using - we tried every photodiode we could get our hands on. Our constraints for the laser mount were 1) Soundly attatch the lasers and sensors, 2) ensure a right angle between the laser and the top surface to minimize the angle of reflectance, 3) recess photodiodes to minimize light bleed, 4) recess MTA connector to reduce stress on the photodiode leads.
+<br><br>
+
+</p>
+<div style = "display:flex;">
+  <div style = "display:inline-block;"> 
+    <img src="harpSketch.png" style = "height: 200; width: 200">
+  </div>
+  <div style = "display:inline-block;">
+    <img src="mountSketch.png" style = "height: 200; width: 200">
+  </div>
+</div>
+
+<p style = "color:white">
+
+  Then, they were created in CAD. This is an extremely tedious process, and it forces you to make all design decisions ahead of time. For example, all the parts had to be ordered before we could begin construction to ensure we had the correct size and spacing.
+
+</p>
+<div style = "display:flex;">
+  <div style = "display:inline-block;"> 
+    <img src="harpCadBlack.png" height: "200" width: "200">
+  </div>
+  <div style = "display:inline-block;">
+    <img src="laserMountBlack.png" height: "200" width: "200">
+  </div>
+</div>
+ 
+ <p style = "color:white">
+  
+  Finally, after the circuitry was to a point at which we were confident with dimensions, we started construction. We are greatful to the kind folks at the Segal/Ford Design Center at Northwestern for letting us use the laser cutter to cut the acrylic. Hardwood supports were installed at the ends to screw on the bottom, into which we cut recesses for the screw heads. This kind of work (rastering) is terribly difficult, tedious, and requires much trial and error. 
+
+</p>
+
+
+    <img src="cutting.jpg" style="width:100%; height:100%; display: inline-block;">
+    <img src="screws.jpg" style="margin-bottom: 10px; width:80%; height:80%;" class = "rotate">
+
+ 
+<p style="color:white">
+
+<br>
+
 
   <a name = "circuit"></a>
   <br><b>Circuitry</b><br><br>
