@@ -15,9 +15,13 @@
   <div class = "middle">
     <div>
       <span>
-      <p>
+    
+        <img source = "main.jpg"></img>
+        <br>
         <iframe width="560" height="315" src="https://www.youtube.com/embed/-Hx-Fstasjc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         <br>
+        
+        <p>
       <b>Introduction and Overview</b><br><br>
         
 Electronic musicians give notoriously boring performances, offering audiences only the top of their heads while they twist knobs and occasionally shout incoherently into a microphone. Common complaints of live electronic performances include variants on “it was more of a light show than a musical performance.” The void of visual content in contemporary electronic music performance has opened because the tasks an electronic musician must perform (like cueing tracks and playing melodies on a midi controller) are difficult to make visible to a large audience. Enter Orpheus. Orpheus is a table top laser harp-styled MIDI controller that provides one and a half octaves of notes and continuous gestural control of the resulting sound. Sensors positioned at either end of Orpheus triangulate the position of the hands over the instrument, giving the user continuous control in the form of MIDI data. The resultant customizable CC mappings allow musicians to access parameters commonly manipulated in electronic music. Most laser harps are projected from the floor with a single laser that is fanned into many separate beams by a stepper motor, and must be played while standing away from the rest of an artists rig. Orpheus’s table top design will allow it to integrate with other MIDI and DJ controllers, while fitting with the laser-light-show aesthetic and filling the void of visual performance.
@@ -29,6 +33,9 @@ Our aim is to design a controller which should be adaptable to a variety of musi
       <br><b>The Laser Array</b><br><br>
    
 The laser array is the heart and soul of Orpheus. It consists of 16 independently controlled lasers in 11 laser housings, and for each of these an associated MIDI trigger event that occurs when the musician intersects the beam of the laser with the hand. Each laser housing holds at least one red laser, and five selected housings also hold an additional blue laser whose purpose is to provide a frame of reference so that the musician can easily identify the position of a particular laser in reference to the others. Underpinning the array is a complex circuit composed of logical gates, transistors, multiplexers, and switches. Each of these devices serves to control which laser is currently active and to allow the musician to specify whether the referential blue lasers should be active.
+<br>
+<>        
+
 <br>
 Orpheus differs from other previously existing laser harps in that the laser array is designed to be “infinite scrolling.” Other designs frequently feature sensors directly opposite the laser beam. In these designs, the intersection of the musician’s hand is detected by identifying the lack of light entering the opposing sensor. In particular, these designs require that an array of sensors be placed above the array of lasers, which increases the size of the overall product. We chose an infinite scrolling design--one in which the laser beams themselves are allowed to extend indefinitely. The intersection of the musician’s hand with a beam is identified instead by the reflection of the laser off the palm back onto the device itself. This considerably reduces the size of the device by removing the frame of opposing sensors.
 <br>
