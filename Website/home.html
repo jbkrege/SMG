@@ -23,15 +23,21 @@
         <iframe width="560" height="315" src="https://www.youtube.com/embed/-Hx-Fstasjc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         <br>
         
-        <p>
+        <p style = "color: white">
       <b>Introduction and Overview</b><br><br>
         
 Electronic musicians give notoriously boring performances, offering audiences only the top of their heads while they twist knobs and occasionally shout incoherently into a microphone. Common complaints of live electronic performances include variants on “it was more of a light show than a musical performance.” The void of visual content in contemporary electronic music performance has opened because the tasks an electronic musician must perform (like cueing tracks and playing melodies on a midi controller) are difficult to make visible to a large audience. Enter Orpheus. Orpheus is a table top laser harp-styled MIDI controller that provides one and a half octaves of notes and continuous gestural control of the resulting sound. Sensors positioned at either end of Orpheus triangulate the position of the hands over the instrument, giving the user continuous control in the form of MIDI data. The resultant customizable CC mappings allow musicians to access parameters commonly manipulated in electronic music. Most laser harps are projected from the floor with a single laser that is fanned into many separate beams by a stepper motor, and must be played while standing away from the rest of an artists rig. Orpheus’s table top design will allow it to integrate with other MIDI and DJ controllers, while fitting with the laser-light-show aesthetic and filling the void of visual performance.
 <br>
 Our aim is to design a controller which should be adaptable to a variety of musical styles, but is mostly oriented towards electronic musicians and DJs. The bombastic laser array fits in well with already existing light shows of live electronic performances, and its small form and MIDI control means Orpheus should integrate easily with the production and performance workflows of electronic musicians. Because the MIDI control is quite flexible, we hope that other musicians might want to find space for Orpheus in their productions and performances.
-      
+<br>
+Orpheus differs from other previously existing laser harps in that the laser array is designed to be “infinite scrolling.” Other designs frequently feature sensors directly opposite the laser beam. In these designs, the intersection of the musician’s hand is detected by identifying the lack of light entering the opposing sensor. In particular, these designs require that an array of sensors be placed above the array of lasers, which increases the size of the overall product. We chose an infinite scrolling design--one in which the laser beams themselves are allowed to extend indefinitely. The intersection of the musician’s hand with a beam is identified instead by the reflection of the laser off the palm back onto the device itself. This considerably reduces the size of the device by removing the frame of opposing sensors.
+<br>
+However, the issue of detection becomes more difficult in such an infinite scrolling design. Previous iterations of Orpheus involved detection of the reflection off the palm through infrared sensors. These are relatively inexpensive sensors with a narrow detection width, which made them good candidates as the reflection off the palm from neighboring laser beams would have a low impact on an infrared sensor. However, the use of fog effects is critical to allowing the full visual impact of the lasers, since the beams are impossible to see without it. This fog introduced high amounts of noise into the detection methods, in the end proving that the utility of infrared sensors for laser beam detection is limited by the performance context.
+<br>
+This iteration of Orpheus forgoes the infrared detection methods in favor of an array of light-collecting diodes. These diodes operate in much the same manner as the common light-emitting diode, but instead measure the incoming luminescence. Each laser housing contains, beyond the lasers, a light-collecting diode which is recessed into the casing. The reflection of a laser beam off the palm is detected by the light-collecting diode next to the laser, and recessing the diodes helps to minimize reflection from neighboring beams or the ambient light of the environment. Tuning the detection of these devices has proven challenging. We had to rely on operational amplifier circuits to best tune the outcoming signal, attenuating noise and identifying the intersection of the associated beam.
+<br> 
       </p>
-      <p>
+      <p style = "color: white">
       <br><b>The Laser Array</b><br><br>
    
 The laser array is the heart and soul of Orpheus. It consists of 16 independently controlled lasers in 11 laser housings, and for each of these an associated MIDI trigger event that occurs when the musician intersects the beam of the laser with the hand. Each laser housing holds at least one red laser, and five selected housings also hold an additional blue laser whose purpose is to provide a frame of reference so that the musician can easily identify the position of a particular laser in reference to the others. Underpinning the array is a complex circuit composed of logical gates, transistors, multiplexers, and switches. Each of these devices serves to control which laser is currently active and to allow the musician to specify whether the referential blue lasers should be active.
@@ -40,6 +46,7 @@ The laser array is the heart and soul of Orpheus. It consists of 16 independentl
 Orpheus uses a Teensy 2.0 microcontroller to control all the inputs and outputs, and send MIDI messages to a computer for processing.
 <img src = "teensy.JPG"><br>
 The Teensy is the big chip on the left.
+Importantly, the laser circuitry operates best at five volts. We had originally selected the Teensy 3.5 as the central microcontroller for Orpheus, but later discovered that the overall laser intensity was not bright enough, as this controller operates at 3.3 volts. Instead, we chose an earlier version of the Teensy microcontroller, the 2.0, as the central controller for the laser array. This microcontroller operates at 5 volts, at the cost of lower overall computational power. For this portion of the project, high computational power was of less importance, and so the increased voltage and decreased size of the Teensy 2.0 proved to be more ideal for laser operation and detection.
     Also visible here are the opamps. Photodiodes detect the light reflected from the lasers off the hand. However, the photodiode's signal is 
     exclusively in the current domain. The opamp circuits convert this to the voltage domain and boost the signal so that 
     it is readable by the Teensy. This was the most difficult part of the laser circuit, and required many hours to optimise.
@@ -74,18 +81,8 @@ The Teensy is the big chip on the left.
   <br>
   Finally, the output from the logic is fed to an array of NPN transistors.
   <img src = "transistors.JPG"></img><br>
-  These transistors prevent the logic circuit from being damaged by the lasers, which require a lot of current.
-    
+  These transistors prevent the logic circuit from being damaged by the lasers, which require a lot of current (>=30mAh each).
    
-<br>
-Orpheus differs from other previously existing laser harps in that the laser array is designed to be “infinite scrolling.” Other designs frequently feature sensors directly opposite the laser beam. In these designs, the intersection of the musician’s hand is detected by identifying the lack of light entering the opposing sensor. In particular, these designs require that an array of sensors be placed above the array of lasers, which increases the size of the overall product. We chose an infinite scrolling design--one in which the laser beams themselves are allowed to extend indefinitely. The intersection of the musician’s hand with a beam is identified instead by the reflection of the laser off the palm back onto the device itself. This considerably reduces the size of the device by removing the frame of opposing sensors.
-<br>
-However, the issue of detection becomes more difficult in such an infinite scrolling design. Previous iterations of Orpheus involved detection of the reflection off the palm through infrared sensors. These are relatively inexpensive sensors with a narrow detection width, which made them good candidates as the reflection off the palm from neighboring laser beams would have a low impact on an infrared sensor. However, the use of fog effects is critical to allowing the full visual impact of the lasers, since the beams are impossible to see without it. This fog introduced high amounts of noise into the detection methods, in the end proving that the utility of infrared sensors for laser beam detection is limited by the performance context.
-<br>
-This iteration of Orpheus forgoes the infrared detection methods in favor of an array of light-collecting diodes. These diodes operate in much the same manner as the common light-emitting diode, but instead measure the incoming luminescence. Each laser housing contains, beyond the lasers, a light-collecting diode which is recessed into the casing. The reflection of a laser beam off the palm is detected by the light-collecting diode next to the laser, and recessing the diodes helps to minimize reflection from neighboring beams or the ambient light of the environment. Tuning the detection of these devices has proven challenging. We had to rely on operational amplifier circuits to best tune the outcoming signal, attenuating noise and identifying the intersection of the associated beam.
-<br>
-Importantly, the laser circuitry operates best at five volts. We had originally selected the Teensy 3.5 as the central microcontroller for Orpheus, but later discovered that the overall laser intensity was not bright enough, as this controller operates at 3.3 volts. Instead, we chose an earlier version of the Teensy microcontroller, the 2.0, as the central controller for the laser array. This microcontroller operates at 5 volts, at the cost of lower overall computational power. For this portion of the project, high computational power was of less importance, and so the increased voltage and decreased size of the Teensy 2.0 proved to be more ideal for laser operation and detection.
-
       </p>
       <p>
       <br><b>Ultra-wideband position detection</b><br><br>
