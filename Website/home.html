@@ -28,8 +28,9 @@
   <ul style = "color:white">
     <li><a href="#intro">   Introduction and Overview</a></li>
     <li><a href="#circuit"> Circuitry</a></li>
-    <li><a href="uwb">      Ultra-wideband Position detection</a></li>
-    <li><a href="creds">    The Team</a></li>s
+    <li><a href="#uwb">      Ultra-wideband Position detection</a></li>
+    <li><a href="#code">     Code  </a></li>
+    <li><a href="#creds">    The Team</a></li>
   </ul>
   <p style = "color: white">
   <br><br>
@@ -98,6 +99,7 @@ Importantly, the laser circuitry operates best at five volts. We had originally 
    
       </p>
       <p style = "color: white">
+      <a name = "uwb"></a>
       <br><b>Ultra-wideband Position Detection</b><br><br>
         
 
@@ -130,12 +132,18 @@ Unfortunately, the overall scope of Orpheus and the timing constraints of the pr
 We have already purchased three more Adafruit Feather M0 microcontrollers, which operate at 3.3 volts, have a high clock frequency, and can provide 500 mA of current, for future iterations of the continuous control. Moreover, they have onboard serial output via USB which is critical for debugging efforts, and are small enough so as to allow them to be wearable on the hand. We chose versions of the Adafruit controllers which come preinstalled with additional radio frequency modules. If we find that the UWB technology is unsuitable for this project then these RF modules may offer another way of range computation. If instead the UWB technology is only partially suitable for use in Orpheus, then using the UWB modules together with the radio modules may offer increased accuracy and reliability when trying to find the position of the hand above the harp.
 <br>
 Overall, the ultra-wideband technology pioneered by DecaWave has proven difficult to work with due to its experimental nature. However, it offers unparalleled accuracy and an ability to operate even in highly noisy (in terms of sensor output) environments, as might be found in the context of a musical performance. While it is unfortunate that we could not implement this technology in the current iteration of Orpheus, we are already planning improvements in future iterations to better integrate the modules into the overall circuitry of the project. We remain optimistic that ultra-wideband technology can offer our project highly accurate calculations in position, and can then form the basis for an expressive language for the continuous control we desire in Orpheus.
-<br>
+<br><br>
+<a name ="code"></a>
+<b>Code</b><br><br>
+
+Orpheus includes minimal firmware downloaded onto the Teensy, and does not require any specific software or drivers to produce music in your music production machine.
+While running the output through Max MSP would give the user more control, we 
+selected a software and driverless approach to increase portability and ease of use.
 
       </p>
       <p style = "color:white">
 
-      <a href="creds"></a>
+      <a name = "creds"></a>
       <br><br>The Team <br><br>
         <b>Ben Krege</b><br>
         JohnKrege2018@u.northwestern.edu<br>
